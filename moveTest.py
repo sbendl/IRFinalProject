@@ -9,8 +9,8 @@ import math
 
 p = [[1,1], [3,3], [1, 3], [1,1]]
 rospy.init_node('talker', anonymous=True)
-#pub = rospy.Publisher('mobile_base/commands/velocity', Twist, queue_size=10)
-pub = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
+pub = rospy.Publisher('mobile_base/commands/velocity', Twist, queue_size=10)
+#pub = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
 
 t = Twist()
 r = rospy.Rate(60)
