@@ -20,9 +20,9 @@ def gradientDescent(map, start, goal):
         minscore = math.inf
         minnext = []
         for next in nextStates:
-            if next and manhattan(next, goal) + manhattan(next, start) < minscore and next not in path:
+            if next and manhattan(next, goal) + manhattan(next, start) - bfarr[next[1]][next[0]] < minscore and next not in path:
                 minnext = next
-                minscore = manhattan(minnext, goal) + manhattan(next, start)
+                minscore = manhattan(minnext, goal) + manhattan(next, start) - bfarr[next[1]][next[0]]
         path.append(minnext)
 
     return path
@@ -34,8 +34,8 @@ def brushfire(env):
     bfMap = [[0 for col in row] for row in env]
     for yindex, row in enumerate(env):
         for xindex, col in enumerate(row):
-            if col != 254:
-            #if col == 0:
+            #if col != 254:
+            if col == 0:
                 obstList.append((xindex, yindex))
                 bfMap[yindex][xindex] = 1
             else:
@@ -43,39 +43,44 @@ def brushfire(env):
 
     frontier = [[item, 1] for item in obstList]
 
+    print(len(obstList))
 
     pyplot.imshow(bfMap, pyplot.cm.gray)
     print('Done converting to image')
     pyplot.show()
-
+    curLen = 0
     while len(frontier) > 0:
         current = frontier.pop(0)
+        if current[1] > curLen:
+            curLen= current[1]
+            print(curLen)
+            print(len(frontier))
 
         if current[0][0] > 0:
             x = current[0][0] - 1
             y = current[0][1]
-            if bfMap[y][x] == 0:
+            if env[y][x] == 254 and bfMap[y][x] == 0:
                 bfMap[y][x] = current[1] + 1
                 if (x, y) not in [x[0] for x in frontier]:
                     frontier.append([(x, y), current[1] + 1])
         if current[0][0] < xMax:
             x = current[0][0] + 1
             y = current[0][1]
-            if bfMap[y][x] == 0:
+            if env[y][x] == 254 and bfMap[y][x] == 0:
                 bfMap[y][x] = current[1] + 1
                 if (x, y) not in [x[0] for x in frontier]:
                     frontier.append([(x, y), current[1] + 1])
         if current[0][1] > 0:
             x = current[0][0]
             y = current[0][1] - 1
-            if bfMap[y][x] == 0:
+            if env[y][x] == 254 and bfMap[y][x] == 0:
                 bfMap[y][x] = current[1] + 1
                 if (x, y) not in [x[0] for x in frontier]:
                     frontier.append([(x, y), current[1] + 1])
         if current[0][1] < yMax:
             x = current[0][0]
             y = current[0][1] + 1
-            if bfMap[y][x] == 0:
+            if env[y][x] == 254 and bfMap[y][x] == 0:
                 bfMap[y][x] = current[1] + 1
                 if (x, y) not in [x[0] for x in frontier]:
                     frontier.append([(x, y), current[1] + 1])
@@ -88,22 +93,10 @@ def gradientRep(bf, x, y):
     map = {0:0, 1:90, 2:180, 3: 270}
 
     neighbors = [99, 99, 99, 99]
-    try:
-        neighbors[0] = bf[y][x + 1]
-    except:
-        pass
-    try:
-        neighbors[2] = bf[y][x - 1]
-    except:
-        pass
-    try:
-        neighbors[3] = bf[y + 1][x]
-    except:
-        pass
-    try:
-        neighbors[1] = bf[y - 1][x]
-    except:
-        pass
+    neighbors[0] = bf[y][x + 1]
+    neighbors[2] = bf[y][x - 1]
+    neighbors[3] = bf[y + 1][x]
+    neighbors[1] = bf[y - 1][x]
 
     maxNeigh = max(neighbors)
     maxIndex = neighbors.index(maxNeigh)

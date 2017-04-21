@@ -63,7 +63,7 @@ if __name__ == '__main__':
     #map = convertToMap('thirdFloorMap.pgm')
     print('Done converting to map')
 
-    map = read_pgm('thirdFloorMap.pgm', byteorder='<')
+    map = read_pgm('minimap.pgm', byteorder='<')
     print('Converting to image')
     pyplot.imshow(map, pyplot.cm.gray)
     print('Done converting to image')
@@ -83,9 +83,9 @@ if __name__ == '__main__':
 #    print(map[coordStart[1]][coordStart[0]])
 #    print(map[coordGoal[1]][coordGoal[0]])
 
-    #print(PathFinding.aStar(map2, (0,0), (9,3)))
+    print(PathFinding.gradientDescent(map, (3,2), (7,6)))
     #print(PathFinding.gradientDescent(map, (1000,525), (3200,2100)))
-    print(PathFinding.gradientDescent(map, coordStart, coordGoal))
+    #print(PathFinding.gradientDescent(map, coordStart, coordGoal))
 
     #print(PathFinding.gradientDescent(map2, coordStart, coordGoal))
 
