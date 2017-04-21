@@ -1,5 +1,5 @@
 import math
-
+import moveTest
 from matplotlib import pyplot
 
 
@@ -24,6 +24,10 @@ def gradientDescent(map, start, goal):
                 minnext = next
                 minscore = manhattan(minnext, goal) + manhattan(next, start) - bfarr[next[1]][next[0]]
         path.append(minnext)
+
+        diffx = current[0] - minnext[0]
+        diffy = current[1] - minnext[1]
+
 
     return path
 
