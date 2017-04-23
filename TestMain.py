@@ -39,6 +39,22 @@ def convertToMap(fileName):
                 map[y].append(None)
     return map
 
+def readBFTxt(filename):
+    bfarr = []
+    with open(filename) as f:
+        for line in f:
+            bfarr.append([int(x) for x in line.strip().split(',')[:-1]])
+
+    return bfarr
+
+def writeBFTxt(filename, bfmap):
+    with open(filename, 'w') as f:
+        for row in bfmap:
+            for col in row:
+                f.write(str(col))
+                f.write(',')
+            f.write('\n')
+
 def convertToImg(map):
     image = [[]]
     for y, line in enumerate(image):
@@ -52,30 +68,22 @@ def convertToImg(map):
                 image[y].append(0)
 
 if __name__ == '__main__':
-
-    map2 = [[254, 254, 254, 254],
-            [254, 0, 0, 254],
-            [254, 254, 0, 254],
-            [0, 254, 254, 254]]
-
     from matplotlib import pyplot
-    print('Converting to map')
-    #map = convertToMap('thirdFloorMap.pgm')
-    print('Done converting to map')
 
-    map = read_pgm('minimap.pgm', byteorder='<')
-    print('Converting to image')
-    pyplot.imshow(map, pyplot.cm.gray)
-    print('Done converting to image')
-    pyplot.show()
-    colors = []
-    for row in map:
-        for item in row:
-            if item not in colors:
-                colors.append(item)
-    print(colors)
-    coordStart = (962, 621)
-    coordGoal = (1133, 561)
+    env = read_pgm('tfmCropTouchUp.pgm', byteorder='<')
+    #print('Converting to image')
+    # pyplot.imshow(env, pyplot.cm.gray)
+    # print('Done converting to image')
+    # pyplot.show()
+    # colors = []
+    # for row in map:
+    #     for item in row:
+    #         if item not in colors:
+    #             colors.append(item)
+    # print(colors)
+    coordStart = (617, 188)
+    coordGoal = (2687, 1776)
+    #coordGoal = (801, 168)
 
     coordFlipStart = (621, 962)
     coordFlipGoal = (561, 1133)
@@ -83,9 +91,15 @@ if __name__ == '__main__':
 #    print(map[coordStart[1]][coordStart[0]])
 #    print(map[coordGoal[1]][coordGoal[0]])
 
-    print(PathFinding.gradientDescent(map, (3,2), (7,6)))
-    #print(PathFinding.gradientDescent(map, (1000,525), (3200,2100)))
-    #print(PathFinding.gradientDescent(map, coordStart, coordGoal))
+    # bfmap = PathFinding.brushfire(map)
+    bfmap = readBFTxt('tfmbf')
+    #wfmap = PathFinding.wavefront(env, coordGoal)
+    #writeBFTxt('tfmwf', wfmap)
+    wfmap = readBFTxt('tfmwf')
+
+
+    #print(PathFinding.gradientDescent(map, (3, 2), (7, 6), bfmap))
+    print(PathFinding.gradientDescent(env, coordStart, coordGoal, bfmap, wfmap))
 
     #print(PathFinding.gradientDescent(map2, coordStart, coordGoal))
 
